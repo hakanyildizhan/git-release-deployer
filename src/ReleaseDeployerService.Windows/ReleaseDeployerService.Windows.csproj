@@ -1,15 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Composition" Version="1.0.31" />
-    <PackageReference Include="Microsoft.Web.Administration" Version="11.1.0" />
-    <PackageReference Include="Unity.log4net" Version="5.11.2" />
+    <PackageReference Include="log4net" Version="2.0.14" IncludeAssets="compile" />
+    <PackageReference Include="Microsoft.Composition" IncludeAssets="compile" Version="1.0.31" />
+    <PackageReference Include="Microsoft.Web.Administration" Version="11.1.0"/>
   </ItemGroup>
 
   <ItemGroup>

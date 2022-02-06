@@ -1,4 +1,4 @@
-﻿using log4net;
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.Web.Administration;
 using ReleaseDeployerService.Core;
 using System.Composition;
@@ -8,21 +8,14 @@ namespace ReleaseDeployerService.Windows
     [Export(typeof(IDeployer))]
     public class IISDeployer : IDeployer
     {
-        //private readonly ILog _logger;
-        //private IConfigReader _reader;
+        private readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        [Import]
-        public ILog _logger { get; set; }
+        private IConfigReader _reader;
 
-        [Import]
-        public IConfigReader _reader { get; set; }
-
-        //[ImportingConstructor]
-        //public IISDeployer([Import] ILog logger, [Import] IConfigReader reader)
-        //{
-        //    _logger = logger;
-        //    _reader = reader;
-        //}
+        public IISDeployer(IConfigReader reader)
+        {
+            _reader = reader;
+        }
 
         public bool Deploy(string sourceDirectory)
         {
@@ -104,7 +97,7 @@ namespace ReleaseDeployerService.Windows
                 {
                     foreach (var file in filesToCopy)
                     {
-                        File.Copy(file, Path.Combine(appPhysicalPath, new FileInfo(file).Name + new FileInfo(file).Extension), true);
+                        File.Copy(file, Path.Combine(appPhysicalPath, new FileInfo(file).Name), true);
                     }
                 }
                 catch (UnauthorizedAccessException ex)

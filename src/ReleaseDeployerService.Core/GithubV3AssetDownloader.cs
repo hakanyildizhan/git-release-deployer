@@ -1,5 +1,4 @@
-﻿using log4net;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace ReleaseDeployerService.Core
@@ -7,10 +6,10 @@ namespace ReleaseDeployerService.Core
     public class GithubV3AssetDownloader : IAssetDownloader
     {
         private IConfigReader _reader;
-        private readonly ILog _logger;
+        private readonly ILogger<GithubV3AssetDownloader> _logger;
         private static HttpClient _client = new HttpClient();
 
-        public GithubV3AssetDownloader(IConfigReader reader, ILog logger)
+        public GithubV3AssetDownloader(IConfigReader reader, ILogger<GithubV3AssetDownloader> logger)
         {
             _reader = reader;
             _logger = logger;
@@ -30,7 +29,7 @@ namespace ReleaseDeployerService.Core
 
             if (!responseMessage.IsSuccessStatusCode)
             {
-                _logger.Error($"An error occurred while getting releases: StatusCode: {responseMessage.StatusCode}\r\nError: {responseMessage.ReasonPhrase}");
+                _logger.LogError($"An error occurred while getting releases: StatusCode: {responseMessage.StatusCode}\r\nError: {responseMessage.ReasonPhrase}");
                 return null;
             }
 
@@ -60,7 +59,7 @@ namespace ReleaseDeployerService.Core
 
             if (!responseMessage.IsSuccessStatusCode)
             {
-                _logger.Error($"An error occurred while downloading the asset: StatusCode: {responseMessage.StatusCode}\r\nError: {responseMessage.ReasonPhrase}");
+                _logger.LogError($"An error occurred while downloading the asset: StatusCode: {responseMessage.StatusCode}\r\nError: {responseMessage.ReasonPhrase}");
                 return null;
             }
 

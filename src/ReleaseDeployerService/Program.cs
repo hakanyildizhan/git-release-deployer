@@ -1,3 +1,5 @@
+using ReleaseDeployerService.Core;
+
 namespace ReleaseDeployerService
 {
     public class Program
@@ -10,16 +12,20 @@ namespace ReleaseDeployerService
         static IHostBuilder CreateHostBuilder(string[] args)
         {
             return Host.CreateDefaultBuilder(args)
-                .UseWindowsService()
-                .ConfigureLogging((hostingContext, config) =>
-                {
-                    config.AddLog4Net("log4net.config", true);
-                    config.SetMinimumLevel(LogLevel.Debug);
-                })
-                .ConfigureServices(services =>
-                {
-                    services.AddHostedService<Worker>();
-                });
+            .UseWindowsService()
+            .ConfigureLogging((hostingContext, config) =>
+            {
+                config.AddLog4Net("log4net.config", true);
+                config.SetMinimumLevel(LogLevel.Debug);
+            })
+            .ConfigureServices(services =>
+            {
+                services.AddSingleton<ILogger, Log4NetLogger>();
+                services.AddSingleton<IConfigReader>(new XmlConfigReader(ServiceConfiguration.LOG_PATH));
+                services.AddSingleton(typeof(IAssetDownloader), typeof(GithubV3AssetDownloader));
+                services.AddTransientFromAssembliesInPath<IDeployer>();
+                services.AddHostedService<Worker>();
+            });
         }
     }
 }

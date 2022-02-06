@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Composition.Convention;
 using System.Composition.Hosting;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.Loader;
 
 namespace ReleaseDeployerService
 {
@@ -18,6 +15,19 @@ namespace ReleaseDeployerService
         {
             return configuration.WithProvider(new InstanceExportDescriptorProvider(
                 exportedInstance, contractType, contractName, metadata));
+        }
+
+        public static ContainerConfiguration WithAssembliesInPath(this ContainerConfiguration configuration, string path, SearchOption searchOption = SearchOption.TopDirectoryOnly)
+        {
+            return WithAssembliesInPath(configuration, path, null, searchOption);
+        }
+
+        public static ContainerConfiguration WithAssembliesInPath(this ContainerConfiguration configuration, string path, AttributedModelProvider conventions, SearchOption searchOption = SearchOption.TopDirectoryOnly)
+        {
+            var assemblyFiles = Directory.GetFiles(path, "*.dll", searchOption);
+            var assemblies = assemblyFiles.Select(AssemblyLoadContext.Default.LoadFromAssemblyPath);
+            configuration = configuration.WithAssemblies(assemblies, conventions);
+            return configuration;
         }
     }
 }
