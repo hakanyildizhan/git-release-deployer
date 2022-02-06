@@ -15,7 +15,7 @@ namespace ReleaseDeployerService
                 {
                     config.AddLog4Net("log4net.config", true);
                     config.SetMinimumLevel(LogLevel.Debug);
-                }).
+                })
                 .ConfigureServices(services =>
                 {
                     services.AddHostedService<Worker>();
