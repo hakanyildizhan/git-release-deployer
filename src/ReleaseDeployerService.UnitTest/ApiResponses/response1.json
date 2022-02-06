@@ -1,0 +1,43 @@
+[
+	{
+    "url": "https://api.github.com/repos/inflatablegrade/export-svg-online/releases/58224234",
+    "assets_url": "https://api.github.com/repos/inflatablegrade/export-svg-online/releases/58224234/assets",
+    "upload_url": "https://uploads.github.com/repos/inflatablegrade/export-svg-online/releases/58224234/assets{?name,label}",
+    "html_url": "https://github.com/inflatablegrade/export-svg-online/releases/tag/v1.0.0",
+    "id": 58224234,
+    "author": {
+      "login": "inflatablegrade",
+      "id": 12798152,
+      "node_id": "MDQ6VXNlcjEyNzk4MTUy",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12798152?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/inflatablegrade",
+      "html_url": "https://github.com/inflatablegrade",
+      "followers_url": "https://api.github.com/users/inflatablegrade/followers",
+      "following_url": "https://api.github.com/users/inflatablegrade/following{/other_user}",
+      "gists_url": "https://api.github.com/users/inflatablegrade/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/inflatablegrade/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/inflatablegrade/subscriptions",
+      "organizations_url": "https://api.github.com/users/inflatablegrade/orgs",
+      "repos_url": "https://api.github.com/users/inflatablegrade/repos",
+      "events_url": "https://api.github.com/users/inflatablegrade/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/inflatablegrade/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "node_id": "RE_kwDOGv2MqM4DeG5q",
+    "tag_name": "v1.0.0",
+    "target_commitish": "master",
+    "name": "Initial release v1.0.0",
+    "draft": false,
+    "prerelease": false,
+    "created_at": "2022-01-28T19:34:58Z",
+    "published_at": "2022-01-28T19:38:21Z",
+    "assets": [
+
+    ],
+    "tarball_url": "https://api.github.com/repos/inflatablegrade/export-svg-online/tarball/v1.0.0",
+    "zipball_url": "https://api.github.com/repos/inflatablegrade/export-svg-online/zipball/v1.0.0",
+    "body": "First version:\r\n\r\n- Draw, clear and save as SVG features\r\n- No mobile support yet"
+  }
+]
