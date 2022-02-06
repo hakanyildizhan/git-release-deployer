@@ -1,4 +1,6 @@
 using ReleaseDeployerService.Core;
+using System.Composition.Convention;
+using System.Composition.Hosting;
 
 namespace ReleaseDeployerService
 {
@@ -15,16 +17,16 @@ namespace ReleaseDeployerService
             .UseWindowsService()
             .ConfigureLogging((hostingContext, config) =>
             {
-                config.AddLog4Net("log4net.config", true);
-                config.SetMinimumLevel(LogLevel.Debug);
+                config.AddLog4Net("log4net.config", true)
+                    .SetMinimumLevel(LogLevel.Debug);
             })
             .ConfigureServices(services =>
             {
-                services.AddSingleton<ILogger, Log4NetLogger>();
-                services.AddSingleton<IConfigReader>(new XmlConfigReader(ServiceConfiguration.LOG_PATH));
-                services.AddSingleton(typeof(IAssetDownloader), typeof(GithubV3AssetDownloader));
-                services.AddTransientFromAssembliesInPath<IDeployer>();
-                services.AddHostedService<Worker>();
+                services.AddSingleton<ILogger, Log4NetLogger>()
+                    .AddSingleton<IConfigReader>(new XmlConfigReader(ServiceConfiguration.LOG_PATH))
+                    .AddSingleton(typeof(IAssetDownloader), typeof(GithubV3AssetDownloader))
+                    .AddMefService<IDeployer>(ServiceLifetime.Transient)
+                    .AddHostedService<Worker>();
             });
         }
     }

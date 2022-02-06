@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using log4net;
 using Microsoft.Web.Administration;
 using ReleaseDeployerService.Core;
 using System.Composition;
@@ -8,13 +8,13 @@ namespace ReleaseDeployerService.Windows
     [Export(typeof(IDeployer))]
     public class IISDeployer : IDeployer
     {
-        private readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly ILog _logger;
+        private readonly IConfigReader _reader;
 
-        private IConfigReader _reader;
-
-        public IISDeployer(IConfigReader reader)
+        public IISDeployer(IConfigReader reader, ILogFactory logFactory)
         {
             _reader = reader;
+            _logger = logFactory.Create(typeof(IISDeployer));
         }
 
         public bool Deploy(string sourceDirectory)

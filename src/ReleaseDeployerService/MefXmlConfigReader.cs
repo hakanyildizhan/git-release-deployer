@@ -7,8 +7,8 @@ namespace ReleaseDeployerService
     /// Wrapper for type <see cref="XmlConfigReader"/> in order to expose it through MEF.
     /// </summary>
     [Export(typeof(IConfigReader))]
-    public class XmlConfigReaderMEF : XmlConfigReader
+    public class MefXmlConfigReader : XmlConfigReader
     {
-        public XmlConfigReaderMEF() : base(ServiceConfiguration.LOG_PATH) { }
+        public MefXmlConfigReader() : base(ServiceConfiguration.LOG_PATH) { }
     }
 }
