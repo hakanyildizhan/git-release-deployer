@@ -1,23 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 using System.Xml;
 
 namespace ReleaseDeployerService.Core
 {
     public class XmlConfigReader : IConfigReader
     {
-        private XmlDocument _doc;
+        private static XmlDocument _doc;
         private string _filePath;
+
+        public XmlConfigReader()
+        {
+            _filePath = ServiceConfiguration.CONFIG_PATH;
+            _doc = new XmlDocument();
+            _doc.Load(_filePath);
+        }
 
         public XmlConfigReader(string configFilePath)
         {
-            _doc = new XmlDocument();
-            _doc.Load(configFilePath);
             _filePath = configFilePath;
+            _doc = new XmlDocument();
+            _doc.Load(_filePath);
         }
 
         public bool CheckValidity()

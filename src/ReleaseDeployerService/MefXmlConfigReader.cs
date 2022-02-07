@@ -9,6 +9,6 @@ namespace ReleaseDeployerService
     [Export(typeof(IConfigReader))]
     public class MefXmlConfigReader : XmlConfigReader
     {
-        public MefXmlConfigReader() : base(ServiceConfiguration.LOG_PATH) { }
+        public MefXmlConfigReader() : base(ServiceConfiguration.CONFIG_PATH) { }
     }
 }
