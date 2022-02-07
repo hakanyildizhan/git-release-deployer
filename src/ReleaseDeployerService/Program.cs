@@ -1,6 +1,4 @@
 using ReleaseDeployerService.Core;
-using System.Composition.Convention;
-using System.Composition.Hosting;
 
 namespace ReleaseDeployerService
 {
@@ -23,8 +21,8 @@ namespace ReleaseDeployerService
             .ConfigureServices(services =>
             {
                 services.AddSingleton<ILogger, Log4NetLogger>()
-                    .AddSingleton<IConfigReader>(new XmlConfigReader(ServiceConfiguration.LOG_PATH))
-                    .AddSingleton(typeof(IAssetDownloader), typeof(GithubV3AssetDownloader))
+                    .AddSingleton<IConfigReader, XmlConfigReader>()
+                    .AddSingleton<IAssetDownloader, GithubV3AssetDownloader>()
                     .AddMefService<IDeployer>(ServiceLifetime.Transient)
                     .AddHostedService<Worker>();
             });

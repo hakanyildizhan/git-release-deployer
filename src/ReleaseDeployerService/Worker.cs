@@ -45,7 +45,7 @@ namespace ReleaseDeployerService
 
                     if (downloadedAsset == null)
                     {
-                        _logger.LogError($"Assets were not downloaded.");
+                        _logger.LogInformation($"Assets were not downloaded.");
                         return;
                     }
 
@@ -60,7 +60,7 @@ namespace ReleaseDeployerService
                 }
                 catch (Exception e)
                 {
-                    _logger.LogInformation($"Error: {e.Message}\r\n{e.StackTrace}");
+                    _logger.LogError($"Error: {e.Message}\r\n{e.StackTrace}");
                 }
 
             }, cancellationToken);
