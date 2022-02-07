@@ -18,11 +18,13 @@ namespace ReleaseDeployerService.Core
 
         public string ExtractToDirectory()
         {
-            var archive = ZipFile.Open(_filePath, ZipArchiveMode.Read);
-            string targetDir = Path.Combine(ServiceConfiguration.APP_DIR, archive.Entries[0].Name);
-            if (Directory.Exists(targetDir)) Directory.Delete(targetDir, true);
-            archive.ExtractToDirectory(ServiceConfiguration.APP_DIR);
-            return targetDir;
+            using (var archive = ZipFile.Open(_filePath, ZipArchiveMode.Read))
+            {
+                string targetDir = Path.Combine(ServiceConfiguration.APP_DIR, archive.Entries[0].FullName.Split('/')[0]);
+                if (Directory.Exists(targetDir)) Directory.Delete(targetDir, true);
+                archive.ExtractToDirectory(ServiceConfiguration.APP_DIR);
+                return targetDir;
+            }
         }
     }
 }

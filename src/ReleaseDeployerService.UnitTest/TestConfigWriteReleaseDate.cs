@@ -17,14 +17,16 @@ namespace ReleaseDeployerService.UnitTest
         [DataRow("2022-01-30T16:03:57Z")]
         public void Write_Release_Date_To_Config_File_With_No_Release_Date_Config_Is_Valid(string releaseDate)
         {
+            var date = DateTime.ParseExact(releaseDate, "yyyy-MM-ddTHH:mm:ssZ", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.AdjustToUniversal);
             string filePath = "ConfigFiles\\testconfig1.xml";
             string newFilePath = "testconfig1_copy.xml";
             File.Copy(filePath, newFilePath, true);
             IConfigReader configReader = new XmlConfigReader(newFilePath);
             var lastDeployDate = configReader.GetLastDeployedReleaseDate();
             Assert.IsNull(lastDeployDate);
-            Assert.IsTrue(configReader.SetLastDeployedReleaseDate(releaseDate));
+            Assert.IsTrue(configReader.SetLastDeployedReleaseDate(date));
             Assert.IsTrue(configReader.CheckValidity());
+            Assert.AreEqual(configReader.GetLastDeployedReleaseDate(), date);
         }
 
         [TestMethod]
@@ -36,9 +38,9 @@ namespace ReleaseDeployerService.UnitTest
             File.Copy(filePath, newFilePath, true);
             IConfigReader configReader = new XmlConfigReader(newFilePath);
             var lastDeployDate = configReader.GetLastDeployedReleaseDate();
-            var newerReleaseDate = DateTime.ParseExact(releaseDate, "yyyy-MM-ddTHH:mm:ssZ", DateTimeFormatInfo.InvariantInfo);
+            var newerReleaseDate = DateTime.ParseExact(releaseDate, "yyyy-MM-ddTHH:mm:ssZ", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.AdjustToUniversal);
             Assert.IsTrue(lastDeployDate < newerReleaseDate);
-            Assert.IsTrue(configReader.SetLastDeployedReleaseDate(releaseDate));
+            Assert.IsTrue(configReader.SetLastDeployedReleaseDate(newerReleaseDate));
             Assert.IsTrue(configReader.CheckValidity());
             Assert.AreEqual(configReader.GetLastDeployedReleaseDate(), newerReleaseDate);
         }
@@ -50,8 +52,9 @@ namespace ReleaseDeployerService.UnitTest
             string newFilePath = "testconfig2_copy2.xml";
             File.Copy(filePath, newFilePath, true);
             IConfigReader configReader = new XmlConfigReader(newFilePath);
-            Assert.IsFalse(configReader.SetLastDeployedReleaseDate("2022-01-30T16:03:57Z"));
-            Assert.AreEqual(configReader.GetLastDeployedReleaseDate(), DateTime.ParseExact("2022-01-30T16:03:57Z", "yyyy-MM-ddTHH:mm:ssZ", DateTimeFormatInfo.InvariantInfo));
+            var existingDate = configReader.GetLastDeployedReleaseDate();
+            Assert.IsFalse(configReader.SetLastDeployedReleaseDate(existingDate.Value));
+            Assert.AreEqual(configReader.GetLastDeployedReleaseDate(), DateTime.ParseExact("2022-01-30T16:03:57Z", "yyyy-MM-ddTHH:mm:ssZ", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.AdjustToUniversal));
             Assert.IsTrue(configReader.CheckValidity());
         }
 
@@ -59,12 +62,13 @@ namespace ReleaseDeployerService.UnitTest
         [DataRow("2022-01-01T12:33:57Z")]
         public void Update_Release_Date_With_Older_Date_Do_Nothing(string olderDate)
         {
+            var date = DateTime.ParseExact(olderDate, "yyyy-MM-ddTHH:mm:ssZ", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.AdjustToUniversal);
             string filePath = "ConfigFiles\\testconfig2.xml";
             string newFilePath = "testconfig2_copy2.xml";
             File.Copy(filePath, newFilePath, true);
             IConfigReader configReader = new XmlConfigReader(newFilePath);
-            Assert.IsFalse(configReader.SetLastDeployedReleaseDate(olderDate));
-            Assert.AreNotEqual(configReader.GetLastDeployedReleaseDate(), DateTime.ParseExact(olderDate, "yyyy-MM-ddTHH:mm:ssZ", DateTimeFormatInfo.InvariantInfo));
+            Assert.IsFalse(configReader.SetLastDeployedReleaseDate(date));
+            Assert.AreNotEqual(configReader.GetLastDeployedReleaseDate(), date);
             Assert.IsTrue(configReader.CheckValidity());
         }
     }

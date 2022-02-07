@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReleaseDeployerService.Unit
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReleaseDeployerService.Core", "ReleaseDeployerService.Core\ReleaseDeployerService.Core.csproj", "{B143432C-BB7B-4EAA-8E45-64ECFE820DFF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReleaseDeployerService.Windows", "ReleaseDeployerService.Windows\ReleaseDeployerService.Windows.csproj", "{86F9DB62-3630-40A6-AA35-AE62E8E48D2A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReleaseDeployerService.Windows", "ReleaseDeployerService.Windows\ReleaseDeployerService.Windows.csproj", "{86F9DB62-3630-40A6-AA35-AE62E8E48D2A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{44455BE2-E2C6-4AF7-A530-B305B1AFB6B5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +38,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3C5DFAD7-C829-48CA-8F17-5DEEBC49EDE6} = {44455BE2-E2C6-4AF7-A530-B305B1AFB6B5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FAE5F724-EA86-4610-8393-AF17A77E662A}

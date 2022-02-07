@@ -2,7 +2,7 @@
 {
     public interface IAssetDownloader
     {
-        Deployable Download();
-        Task<Deployable> DownloadAsync();
+        Deployable? Download();
+        Task<Deployable?> DownloadAsync();
     }
 }

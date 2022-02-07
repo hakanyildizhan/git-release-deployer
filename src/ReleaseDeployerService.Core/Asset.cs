@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ReleaseDeployerService.Core
 {
-    public class Asset
+    public struct Asset
     {
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }

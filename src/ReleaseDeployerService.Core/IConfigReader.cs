@@ -10,6 +10,6 @@
         string GetDeploySite();
         uint GetCheckInterval();
         DateTime? GetLastDeployedReleaseDate();
-        bool SetLastDeployedReleaseDate(string releaseDate);
+        bool SetLastDeployedReleaseDate(DateTime releaseDate);
     }
 }

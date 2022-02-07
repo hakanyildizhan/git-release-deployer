@@ -19,4 +19,10 @@
   <ItemGroup>
     <ProjectReference Include="..\ReleaseDeployerService.Core\ReleaseDeployerService.Core.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="config.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

@@ -22,7 +22,7 @@ namespace ReleaseDeployerService
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation("ExecuteAsync started.");
+            _logger.LogInformation("Service is started.");
             _timer = new Timer(DoWork, stoppingToken, TimeSpan.Zero, TimeSpan.FromMinutes(_configReader.GetCheckInterval()));
             return Task.CompletedTask;
         }
@@ -34,7 +34,7 @@ namespace ReleaseDeployerService
 
         private void DoWork(object state)
         {
-            _logger.LogInformation($"Work started at {DateTime.Now}");
+            _logger.LogInformation($"Work started.");
             CancellationToken cancellationToken = (CancellationToken)state;
 
             Task t = Task.Run(async () =>
@@ -45,21 +45,22 @@ namespace ReleaseDeployerService
 
                     if (downloadedAsset == null)
                     {
-                        _logger.LogError($"Assets could not be downloaded.");
+                        _logger.LogError($"Assets were not downloaded.");
                         return;
                     }
 
-                    var extractor = ExtractorFactory.GetExtractor(downloadedAsset);
+                    var extractor = ExtractorFactory.GetExtractor(downloadedAsset.Value);
                     string deployablesDir = extractor.ExtractToDirectory();
 
-                    var deploySuccess = _deployer.Deploy(deployablesDir);
-                    if (deploySuccess) _logger.LogInformation($"Deploy succeeded");
-                    else _logger.LogError($"Deploy failed");
+                    var deploySuccess = _deployer.Deploy(new DeployArgs() 
+                    { 
+                        DeployablesPath = deployablesDir,
+                        DeployablesCreatedAt = downloadedAsset.Value.CreatedAt
+                    });
                 }
                 catch (Exception e)
                 {
                     _logger.LogInformation($"Error: {e.Message}\r\n{e.StackTrace}");
-                    throw;
                 }
 
             }, cancellationToken);

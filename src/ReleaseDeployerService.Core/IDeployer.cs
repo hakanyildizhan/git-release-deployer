@@ -8,6 +8,6 @@ namespace ReleaseDeployerService.Core
 {
     public interface IDeployer
     {
-        bool Deploy(string sourceDirectory);
+        bool Deploy(DeployArgs args);
     }
 }

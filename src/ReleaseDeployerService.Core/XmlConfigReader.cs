@@ -110,24 +110,23 @@ namespace ReleaseDeployerService.Core
         {
             var node = _doc.DocumentElement.SelectSingleNode("/serviceConfig/gitRepo/lastDeployedReleaseDate");
             if (node == null) return null;
-            return DateTime.ParseExact(node.InnerText, "yyyy-MM-ddTHH:mm:ssZ", DateTimeFormatInfo.InvariantInfo);
+            return DateTime.ParseExact(node.InnerText, "yyyy-MM-ddTHH:mm:ssZ", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.AdjustToUniversal);
         }
 
-        public bool SetLastDeployedReleaseDate(string releaseDate)
+        public bool SetLastDeployedReleaseDate(DateTime releaseDate)
         {
             try
             {
-                var date = DateTime.ParseExact(releaseDate, "yyyy-MM-ddTHH:mm:ssZ", DateTimeFormatInfo.InvariantInfo);
                 var existingDate = GetLastDeployedReleaseDate();
 
-                if (existingDate != null && existingDate >= date)
+                if (existingDate != null && existingDate >= releaseDate)
                 {
                     return false;
                 }
 
                 var repoNode = _doc.DocumentElement.SelectSingleNode("/serviceConfig/gitRepo");
                 XmlElement lastReleaseDateNode = _doc.CreateElement("lastDeployedReleaseDate");
-                lastReleaseDateNode.InnerText = date.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ", DateTimeFormatInfo.InvariantInfo);
+                lastReleaseDateNode.InnerText = releaseDate.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ", DateTimeFormatInfo.InvariantInfo);
                 var existingNode = repoNode.SelectSingleNode("/serviceConfig/gitRepo/lastDeployedReleaseDate");
                 if (existingNode != null) repoNode.RemoveChild(existingNode);
                 repoNode.AppendChild(lastReleaseDateNode);

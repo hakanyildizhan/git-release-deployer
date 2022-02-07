@@ -17,11 +17,11 @@ namespace ReleaseDeployerService.Windows
             _logger = logFactory.Create(typeof(IISDeployer));
         }
 
-        public bool Deploy(string sourceDirectory)
+        public bool Deploy(DeployArgs args)
         {
-            if (!Directory.Exists(sourceDirectory) || Directory.GetFiles(sourceDirectory).Length == 0)
+            if (!Directory.Exists(args.DeployablesPath) || Directory.GetFiles(args.DeployablesPath).Length == 0)
             {
-                _logger.Error($"An error occurred. Directory \"{sourceDirectory}\" does not exist or has no files.");
+                _logger.Error($"An error occurred. Directory \"{args.DeployablesPath}\" does not exist or has no files.");
                 return false;
             }
 
@@ -91,7 +91,7 @@ namespace ReleaseDeployerService.Windows
                 }
 
                 // copy files
-                var filesToCopy = Directory.GetFiles(sourceDirectory);
+                var filesToCopy = Directory.GetFiles(args.DeployablesPath);
 
                 try
                 {
@@ -124,6 +124,8 @@ namespace ReleaseDeployerService.Windows
                     return false;
                 }
 
+                _logger.Info("Deploy succeeded.");
+                _reader.SetLastDeployedReleaseDate(args.DeployablesCreatedAt);
                 return true;
             }
         }

@@ -15,12 +15,12 @@ namespace ReleaseDeployerService.Core
             _logger = logger;
         }
 
-        public Deployable Download()
+        public Deployable? Download()
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Deployable> DownloadAsync()
+        public async Task<Deployable?> DownloadAsync()
         {
             _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {_reader.GetGitToken()}");
             _client.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
@@ -39,22 +39,33 @@ namespace ReleaseDeployerService.Core
             string downloadTargetFileName = String.Empty;
             string downloadUri = string.Empty;
             var deployableType = DeployableType.Asset;
+            var deployDate = DateTime.Now;
 
             if (lastRelease.Assets != null && lastRelease.Assets.Count > 0)
             {
                 var asset = lastRelease.Assets.OrderByDescending(a => a.CreatedAt).First();
                 downloadUri = $"https://api.github.com/repos/{_reader.GetGitUserName()}/{_reader.GetGitRepo()}/releases/assets/{asset.Id}";
                 downloadTargetFileName = asset.Name;
+                deployDate = asset.CreatedAt;
             }
             else
             {
                 downloadUri = lastRelease.ZipballUrl;
-                downloadTargetFileName = lastRelease.Name;
+                downloadTargetFileName = $"{_reader.GetGitRepo()}-{lastRelease.Name}.zip";
                 deployableType = DeployableType.SourceZipball;
+                deployDate = lastRelease.CreatedAt;
+            }
+
+            // abort if this or a later release was already deployed
+            var lastDeployDate = _reader.GetLastDeployedReleaseDate();
+            if (lastDeployDate != null && lastDeployDate >= deployDate)
+            {
+                _logger.LogInformation("No new assets since last deploy, aborting.");
+                return null;
             }
 
             _client.DefaultRequestHeaders.Remove("Accept");
-            _client.DefaultRequestHeaders.Add("Accept", "application/octet-stream");
+            _client.DefaultRequestHeaders.Add("Accept", deployableType == DeployableType.Asset ? "application/octet-stream" : "application/vnd.github.V3.raw");
             responseMessage = await _client.GetAsync(downloadUri);
 
             if (!responseMessage.IsSuccessStatusCode)
@@ -70,7 +81,12 @@ namespace ReleaseDeployerService.Core
                 await responseMessage.Content.CopyToAsync(fs);
             }
 
-            return new Deployable() { Path = downloadTargetPath, DeployableType = deployableType };
+            return new Deployable() 
+            { 
+                Path = downloadTargetPath, 
+                DeployableType = deployableType,
+                CreatedAt = deployDate
+            };
         }
     }
 }
