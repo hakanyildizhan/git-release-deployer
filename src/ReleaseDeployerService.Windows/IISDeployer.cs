@@ -64,12 +64,12 @@ namespace ReleaseDeployerService.Windows
                     }
 
                     appPoolName = virtualDir.ApplicationPoolName;
-                    appPhysicalPath = virtualDir.VirtualDirectories[0].PhysicalPath;
+                    appPhysicalPath = Environment.ExpandEnvironmentVariables(virtualDir.VirtualDirectories[0].PhysicalPath);
                 }
                 else
                 {
                     appPoolName = targetSite.Applications[0].ApplicationPoolName;
-                    appPhysicalPath = targetSite.Applications[0].VirtualDirectories[0].PhysicalPath;
+                    appPhysicalPath = Environment.ExpandEnvironmentVariables(targetSite.Applications[0].VirtualDirectories[0].PhysicalPath);
                 }
 
                 // stop app pool
